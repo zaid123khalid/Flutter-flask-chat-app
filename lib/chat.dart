@@ -1,37 +1,58 @@
-import 'dart:io';
-
 import 'package:chat_app_flask/socket_con.dart';
 import 'package:flutter/material.dart';
 
 class ChatPage extends StatefulWidget {
   final String username;
-  const ChatPage({super.key, required this.username});
+  final String roomCode;
+  final List messages;
+  const ChatPage(
+      {super.key,
+      required this.username,
+      required this.roomCode,
+      this.messages = const []});
 
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<Map<dynamic, dynamic>> messages = [];
+  List messages = [];
   final TextEditingController _msgController = TextEditingController();
+  bool _isMounted = false; // Add a flag to track if the widget is mounted
+
   @override
   void initState() {
     super.initState();
-    SocketService.connect(widget.username);
+    messages.addAll(widget.messages);
+    SocketService.connect(widget.username, widget.roomCode);
     SocketService.socket!.on(
-        "recieved_msg",
-        (data) => setState(() {
-              messages.add({
-                "username": data["username"],
-                "msg": data["msg"],
-              });
-            }));
+      "recieved_msg",
+      (data) {
+        if (_isMounted) {
+          // Check if the widget is still mounted
+          setState(() {
+            messages.add({
+              "username": data["username"],
+              "msg": data["msg"],
+            });
+          });
+        }
+      },
+    );
+    _isMounted = true;
+  }
+
+  @override
+  void dispose() {
+    _isMounted = false; // Update the flag when the widget is disposed
+    SocketService.socket!.disconnect();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Chat Page")),
+      appBar: AppBar(title: Text(widget.roomCode)),
       body: Column(
         children: [
           Expanded(
@@ -98,8 +119,8 @@ class _ChatPageState extends State<ChatPage> {
                           "username": widget.username,
                           "msg": _msgController.text,
                         });
-                        SocketService.sendMessage(
-                            widget.username, _msgController.text);
+                        SocketService.sendMessage(widget.username,
+                            _msgController.text, widget.roomCode);
                         setState(() {});
                         _msgController.clear();
                       }

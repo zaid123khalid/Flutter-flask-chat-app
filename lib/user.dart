@@ -34,6 +34,7 @@ class UserPage extends StatelessWidget {
                   return null;
                 },
               ),
+              const SizedBox(height: 10),
               TextFormField(
                 controller: _roomController,
                 decoration: const InputDecoration(
@@ -49,14 +50,13 @@ class UserPage extends StatelessWidget {
                 },
               ),
               ElevatedButton(
-                  child: const Text("Continue"),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      var req = await HttpConnection.joinRoom(
-                          _userController.text, _roomController.text);
-                      if (req.statusCode == 200) {
-                        print(req.body);
-                        print(jsonDecode(req.body)["messages"]);
+                child: const Text("Join Room"),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    var req = await HttpConnection.joinRoom(
+                        _userController.text, _roomController.text);
+                    if (req.statusCode == 200) {
+                      if (context.mounted) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -67,15 +67,65 @@ class UserPage extends StatelessWidget {
                             ),
                           ),
                         );
-                      } else {
+                      }
+                    } else if (req.statusCode == 400) {
+                      if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text("Error joining room"),
+                            content: Text("Room Not Found"),
+                          ),
+                        );
+                      }
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Something went wrong"),
                           ),
                         );
                       }
                     }
-                  }),
+                  }
+                },
+              ),
+              ElevatedButton(
+                child: const Text("Create Room"),
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    var req = await HttpConnection.createRoom(
+                        _userController.text, _roomController.text);
+                    if (req.statusCode == 200) {
+                      if (context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChatPage(
+                              username: _userController.text,
+                              roomCode: _roomController.text,
+                            ),
+                          ),
+                        );
+                      }
+                    } else if (req.statusCode == 400) {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Invalid Room Code"),
+                          ),
+                        );
+                      }
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Something went wrong"),
+                          ),
+                        );
+                      }
+                    }
+                  }
+                },
+              ),
             ],
           ),
         ),

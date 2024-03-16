@@ -8,7 +8,7 @@ class SocketController extends GetxController {
 
   initSocket() async {
     final token = await homeController.getToken();
-    socket = io("http://192.168.100.8:5000", <String, dynamic>{
+    socket = io("http://192.168.100.7:5000", <String, dynamic>{
       'transports': ['websocket'],
       'query': {
         'token': token,

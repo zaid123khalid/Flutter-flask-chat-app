@@ -8,7 +8,7 @@ class HttpConnection {
       this.headers = const {
         'Content-Type': 'application/json',
       }});
-  final String baseUrl = "http://192.168.100.8:5000/api";
+  final String baseUrl = "http://192.168.100.7:5000/api";
 
   Future get({required String url, Map<String, String>? headers}) async {
     var response = await http.get(

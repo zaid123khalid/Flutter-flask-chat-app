@@ -6,6 +6,7 @@ import 'package:chat_app/controllers/user_controller.dart';
 import 'package:chat_app/pages/chat_page.dart';
 import 'package:chat_app/pages/friend_chat_page.dart';
 import 'package:chat_app/pages/login_page.dart';
+import 'package:chat_app/pages/setting_page.dart';
 import 'package:get/get.dart';
 import 'package:chat_app/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
@@ -172,7 +173,6 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.notifications)),
           PopupMenuButton(
               position: PopupMenuPosition.under,
-              color: Colors.blue,
               tooltip: "Menu",
               itemBuilder: (context) {
                 return [
@@ -289,6 +289,22 @@ class _HomePageState extends State<HomePage> {
                         Icon(Icons.add_circle_outline_outlined),
                         SizedBox(width: 10),
                         Text("Create Room"),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SettingsPage()),
+                      );
+                    },
+                    child: const Row(
+                      children: [
+                        Icon(Icons.settings),
+                        SizedBox(width: 10),
+                        Text("Settings"),
                       ],
                     ),
                   ),

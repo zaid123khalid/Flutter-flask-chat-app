@@ -109,11 +109,7 @@ class HomeController extends GetxController {
   }
 
   logout() async {
-    var hiveBox = await Hive.openBox('user');
-    hiveBox.delete('username');
-    hiveBox.delete('password');
-    hiveBox.delete('rememberMe');
-    hiveBox.delete('token');
+    await Hive.deleteBoxFromDisk('user');
   }
 
   joinRoom() async {

@@ -9,8 +9,8 @@ class SignupController extends GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
-  RxBool isPasswordVisible = false.obs;
-  RxBool isConfirmPasswordVisible = false.obs;
+  RxBool isPasswordVisible = true.obs;
+  RxBool isConfirmPasswordVisible = true.obs;
 
   void togglePasswordVisibility() {
     isPasswordVisible.value = !isPasswordVisible.value;

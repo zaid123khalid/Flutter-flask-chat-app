@@ -6,11 +6,7 @@ class UserController extends GetxController {
   RxString password = ''.obs;
 
   setUsername(String value) {
-    print(value);
-
     username.value = value;
-
-    print(username.value);
   }
 
   setEmail(String value) {

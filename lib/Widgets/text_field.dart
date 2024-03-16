@@ -27,8 +27,6 @@ class AppTextField extends StatelessWidget {
       validator: validator,
       controller: controller,
       decoration: InputDecoration(
-        border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(20))),
         hintText: hintText,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,

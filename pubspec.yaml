@@ -15,6 +15,7 @@ dependencies:
   hive_flutter: ^1.1.0
   socket_io_client: ^2.0.3+1
   json_theme: ^6.4.0
+  provider:
 
 dev_dependencies:
   flutter_test:
